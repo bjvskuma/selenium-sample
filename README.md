@@ -2,6 +2,9 @@
 
 Initial version
 
+How to Run:
+ - mvn test
+
 Customizations
 
  - Move code to multiple features/scenarios
