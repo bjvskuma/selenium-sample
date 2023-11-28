@@ -45,7 +45,7 @@ public class Step1Defs {
         WebElement searchBox = webDriver.findElement(By.xpath("//*[@id=\"searchtext_freetext_search_form\"]"));
         searchBox.sendKeys("india");
 
-        Thread.sleep(5000);
+        Thread.sleep(3000);
 
         WebElement ul = webDriver.findElement(By.id("as_ul"));
         List<WebElement> liElements = ul.findElements(By.tagName("li"));
@@ -138,11 +138,82 @@ public class Step1Defs {
 
         new Actions(webDriver).click(accSubmit).perform();
 
+
         WebDriverWait wait4 = new WebDriverWait(webDriver, Duration.ofSeconds(50));
         wait4.until(ExpectedConditions.elementToBeClickable(By.cssSelector("[id^=extraForm-container]"))).click();
 
         WebElement extraFormContainer = webDriver.findElement(By.cssSelector("div#extrasSelection"));
         new Actions(webDriver).click(extraFormContainer.findElement(By.tagName("button"))).click().perform();
+
+        Thread.sleep(5000);
+
+        // Pax selection
+        WebElement paxSection = webDriver.findElement(By.cssSelector("div#adult-1"));
+        List<WebElement> tables = paxSection.findElements(By.cssSelector("table.nbf_tpl_pms_bf_paxinfo"));
+
+        for (int k = 0 ; k < 2; k++) {
+
+            int id = k + 1;
+            WebElement subElm = tables.get(k);
+
+            WebElement titleElm = subElm.findElement(By.name("pax-a-title-" + id));
+            Select selectTitle = new Select(titleElm);
+            String tle = k == 0 ? "Mr" : "Mrs";
+            selectTitle.selectByValue(tle);
+
+            WebElement fName = subElm.findElement(By.name("pax-a-first-" + id));
+            fName.sendKeys("FName" + id );
+
+            WebElement lName = subElm.findElement(By.name("pax-a-last-" + id));
+            lName.sendKeys("LName" + id);
+
+            WebElement dob1 = subElm.findElement(By.name("pax-a-dobd-" + id));
+            Select dobd1 = new Select(dob1);
+            dobd1.selectByValue("10");
+
+            WebElement dob2 = subElm.findElement(By.name("pax-a-dobm-" + id));
+            Select dobm = new Select(dob2);
+            dobm.selectByValue("3");
+
+            WebElement dob3 = subElm.findElement(By.name("pax-a-doby-" + id));
+            Select doby = new Select(dob3);
+            doby.selectByValue("1975");
+
+        }
+
+        WebElement leadContect = webDriver.findElement(By.cssSelector("div.nbf_tpl_pms_bf_leadpaxdetails"));
+        WebElement tableContact = leadContect.findElement(By.cssSelector("table.nbf_tpl_pms_bf_leadpaxdetails"));
+
+        WebElement cName = tableContact.findElement(By.cssSelector("input#contact-name"));
+        cName.clear();
+        cName.sendKeys("FirstName, LastName");
+
+        WebElement cMob = tableContact.findElement(By.cssSelector("input#contact-mobile"));
+        cMob.sendKeys("0741234567");
+
+        WebElement cEmail = tableContact.findElement(By.cssSelector("input#contact-email"));
+        cEmail.sendKeys("test@gmail.com");
+
+        WebElement cAddr1 = tableContact.findElement(By.cssSelector("input#contact-address1"));
+        cAddr1.sendKeys("Addr1");
+
+        WebElement cAddr2 = tableContact.findElement(By.cssSelector("input#contact-address2"));
+        cAddr2.sendKeys("Addr2");
+
+        WebElement cCity = tableContact.findElement(By.cssSelector("input#contact-city"));
+        cCity.sendKeys("City1");
+
+        WebElement cPCode = tableContact.findElement(By.cssSelector("input#contact-postcode"));
+        cPCode.sendKeys("0099");
+
+        WebElement cHAbt = tableContact.findElement(By.name("wheredidyouhear"));
+        Select hearAbt = new Select(cHAbt);
+        hearAbt.selectByValue("2");
+
+        //Submit details
+        WebElement submitDiv = webDriver.findElement(By.cssSelector("div#paxform-select"));
+        WebElement submitBtn = submitDiv.findElement(By.tagName("button"));
+        new Actions(webDriver).click(submitBtn).perform();
 
     }
     @Then("The page title should have {string}")
