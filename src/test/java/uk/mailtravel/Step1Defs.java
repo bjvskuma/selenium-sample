@@ -215,6 +215,23 @@ public class Step1Defs {
         WebElement submitBtn = submitDiv.findElement(By.tagName("button"));
         new Actions(webDriver).click(submitBtn).perform();
 
+        Thread.sleep(10000);
+
+        // Validate booking page
+        WebElement headerDiv = webDriver.findElement(By.cssSelector("div.nbf_header"));
+        WebElement h1Elm = headerDiv.findElement(By.cssSelector("h1.nbf_fancyimg_payment_pageheader"));
+
+        Assertions.assertEquals("Confirm Details + Book",h1Elm.getText());
+
+        WebDriverWait bookBtn = new WebDriverWait(webDriver, Duration.ofSeconds(10));
+        wait4.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[id='nbf_booknow_button']"))).click();
+
+        WebElement divElm = webDriver.findElement(By.cssSelector("div.nbf_fancyimg_payment_book_button"));
+
+        Assertions.assertEquals("BOOK NOW", divElm.getText());
+
+        webDriver.quit();
+        
     }
     @Then("The page title should have {string}")
     public void the_page_title_should_have(String string) {
